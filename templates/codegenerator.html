@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Generator</title>
+    <!-- Include Bootstrap CSS -->
+    <link id="theme-style" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS for Code Display -->
+    <style>
+        /* Style the body */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Style the container */
+        .container {
+            border-radius: 4px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Style the heading */
+        h1 {
+            text-align: center; /* Center the heading */
+        }
+
+        /* Style the form */
+        form {
+            margin-top: 20px;
+        }
+
+        /* Style the form labels */
+        label {
+            font-weight: bold;
+        }
+
+        /* Style the input fields */
+        .form-control {
+            border-radius: 4px;
+        }
+
+        /* Style the code display section */
+        .code-display {
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+
+        /* Style the code block within the display section */
+        .code-block {
+            font-family: monospace; /* Use a monospace font for code */
+            white-space: pre-wrap; /* Wrap long lines */
+        }
+
+        /* Style the submit button */
+        .btn-primary {
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5" style="padding:20px;">
+        <h1 class="mb-4">Code Generator</h1>
+
+        <!-- Toggle Button for Theme Switching -->
+        <div class="form-group text-center">
+            <button id="theme-toggle" class="btn btn-primary">Switch Theme</button>
+        </div>
+
+        <!-- User Input Form -->
+        <form method="POST" action="/codegenerator">
+            <div class="form-group">
+                <label for="user_input">Enter Text:</label>
+                <input type="text" class="form-control" id="user_input" name="user_input" required>
+            </div>
+
+            <div class="form-group">
+                <label for="language">Select Language:</label>
+                <select class="form-control" id="language" name="language">
+                    <option value="python">Python</option>
+                    <option value="java">Java</option>
+                    <option value="php">PHP</option>
+                    <!-- Add other languages as needed -->
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Generate Code</button>
+        </form>
+
+        <!-- Generated Code Display -->
+        {% if code %}
+        <div class="code-display">
+            <h2 class="text-center">Generated Code</h2>
+            <pre class="code-block">{{ code }}</pre>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Include Bootstrap JS (Optional) -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- JavaScript for Theme Switching -->
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeStyle = document.getElementById('theme-style');
+
+        // Function to toggle between black and white themes
+        themeToggle.addEventListener('click', () => {
+            if (themeStyle.getAttribute('href') === 'https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css') {
+                themeStyle.setAttribute('href', 'https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/darkly/bootstrap.min.css');
+            } else {
+                themeStyle.setAttribute('href', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css');
+            }
+        });
+    </script>
+</body>
+</html>

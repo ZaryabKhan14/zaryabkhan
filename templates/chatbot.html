@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspiring Assistant Chatbot</title>
+    <style>
+        :root {
+            --background-light: #f9f9f9;
+            --background-dark: #333;
+            --text-light: #333;
+            --text-dark: #fff;
+            --button-bg-light: #007BFF;
+            --button-bg-dark: #0056b3;
+            --button-text: #fff;
+            --heading-light: #007BFF;
+            --heading-dark: #007BFF;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .toggle-container {
+            text-align: right;
+            padding: 10px 20px;
+        }
+
+        .toggle-label {
+            color: var(--text-light);
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        .toggle-input {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            border-radius: 30px;
+            transition: 0.4s;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            border-radius: 50%;
+            transition: 0.4s;
+        }
+
+        .toggle-input:checked + .toggle-slider {
+            background-color: var(--button-bg-light);
+        }
+
+        .toggle-input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            max-width: 80%; /* Adjusted max-width for responsiveness */
+            margin: 20px auto;
+        }
+
+        h1 {
+            color: var(--heading-light);
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        input[type="file"],
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="file"]:hover,
+        input[type="text"]:hover,
+        input[type="file"]:focus,
+        input[type="text"]:focus {
+            border-color: var(--button-bg-light);
+        }
+
+        input[type="submit"] {
+            background-color: var(--button-bg-light);
+            color: var(--button-text);
+            border: none;
+            border-radius: 5px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: var(--button-bg-dark);
+        }
+
+        h2 {
+            color: var(--heading-light);
+            margin-top: 20px;
+            font-size: 20px;
+        }
+
+        p {
+            color: var(--text-light);
+            font-size: 18px;
+        }
+
+        /* Dark Theme Styles */
+        body.dark-theme {
+            --background-light: #333;
+            --background-dark: #111;
+            --text-light: #fff;
+            --text-dark: #fff;
+            --button-bg-light: #007BFF;
+            --button-bg-dark: #0056b3;
+            --button-text: #fff;
+            --heading-light: #007BFF;
+            --heading-dark: #007BFF;
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle Button -->
+    <div class="toggle-container">
+        <label class="toggle-label">Dark Theme</label>
+        <label class="toggle-input">
+            <input type="checkbox" id="theme-toggle">
+            <span class="toggle-slider"></span>
+        </label>
+    </div>
+
+    <div class="container">
+        <h1>Inspiring Assistant Chatbot</h1>
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".pdf" required>
+            <input type="text" name="query" placeholder="Enter your query" required>
+            <input type="submit" value="Ask">
+        </form>
+
+        {% if response %}
+            <h2>Assistant's Response:</h2>
+            <p>{{ response }}</p>
+        {% endif %}
+    </div>
+
+    <script>
+        const themeToggle = document.getElementById("theme-toggle");
+        const body = document.body;
+
+        themeToggle.addEventListener("change", () => {
+            if (themeToggle.checked) {
+                body.classList.add("dark-theme");
+            } else {
+                body.classList.remove("dark-theme");
+            }
+        });
+    </script>
+</body>
+</html>
