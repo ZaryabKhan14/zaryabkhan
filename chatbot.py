@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request,Blueprint
+from flask import Flask, render_template, request, Blueprint
 import openai
 import time
 import pdfplumber
@@ -11,50 +11,53 @@ api_key = os.getenv("api_key")
 # Initialize the OpenAI client
 client = openai.Client(api_key=api_key)
 
-chatbot_app = Blueprint('chatbot',__name__)
+chatbot_app = Blueprint('chatbot', __name__)
 
 @chatbot_app.route('/', methods=['GET', 'POST'])
 def assistant_chatbot():
     if request.method == 'POST':
-        file = request.files['file']
+        file = request.files.get('file')  # Get the file if it's uploaded
         user_query = request.form['query']
 
-        if file and user_query:
+        pdf_text = ""
+        if file:  # Check if the user uploaded a file
             # Read the PDF content
             with pdfplumber.open(file) as pdf:
-                pdf_text = ""
                 for page in pdf.pages:
                     pdf_text += page.extract_text()
 
-            # Create a new thread
-            thread = client.beta.threads.create()
+        # Create a new thread
+        thread = client.beta.threads.create()
 
-            # Create a message from the user with the PDF content
-            message = client.beta.threads.messages.create(
-                thread_id=thread.id,
-                role="user",
-                content=user_query + "\n" + pdf_text,  # Combine user query and PDF content
-            )
+        # Create a message from the user
+        # Combine user query and PDF content if PDF is uploaded
+        content = user_query + "\n" + pdf_text if pdf_text else user_query
+        message = client.beta.threads.messages.create(
+            thread_id=thread.id,
+            role="user",
+            content=content,
+        )
 
-            # Create a run
-            run = client.beta.threads.runs.create(
-                thread_id=thread.id,
-                assistant_id="asst_6o7w7E8I6m0cVfM3zFzePcb9",  # Assuming you have an assistant object
-                instructions="you are a helpful assistant if the user asks you a normal question, then give a normal answer. If the user asks according to the file, then give an answer from the file.",
-            )
+        # Create a run
+        run = client.beta.threads.runs.create(
+            thread_id=thread.id,
+            assistant_id="asst_6o7w7E8I6m0cVfM3zFzePcb9",  # Assuming you have an assistant object
+            instructions="you are a helpful assistant if the user asks you a normal question, then give a normal answer. If the user asks according to the file, then give an answer from the file.",
+        )
 
-            # Wait for the run to complete
-            while not run.completed_at:
-                time.sleep(5)
-                run = client.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
+        # Wait for the run to complete
+        while not run.completed_at:
+            time.sleep(5)
+            run = client.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
 
-            # Retrieve and display the assistant's response
-            messages = client.beta.threads.messages.list(thread_id=thread.id)
-            last_message = messages.data[0]
-            response = last_message.content[0].text.value
-            return render_template('chatbot.html', response=response)
+        # Retrieve and display the assistant's response
+        messages = client.beta.threads.messages.list(thread_id=thread.id)
+        last_message = messages.data[0]
+        response = last_message.content[0].text.value
+        return render_template('chatbot.html', response=response)
 
     return render_template('chatbot.html')
+
 
 
 
