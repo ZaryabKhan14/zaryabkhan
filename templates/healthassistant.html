@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Assistant Chatbot</title>
+    <style>
+        body {
+            background: #eee;
+        }
+
+        .container {
+            margin-top: 40px;
+        }
+
+        .chat-list {
+            padding: 0;
+            font-size: 1rem; /* Increased text size for chat messages */
+        }
+
+        .chat-list li {
+            margin-bottom: 10px;
+            overflow: auto;
+            color: #ffffff;
+        }
+
+        .chat-list .chat-img {
+            float: left;
+            width: 48px;
+        }
+
+        .chat-list .chat-img img {
+            -webkit-border-radius: 50px;
+            -moz-border-radius: 50px;
+            border-radius: 50px;
+            width: 100%;
+        }
+
+        .chat-list .chat-message {
+            -webkit-border-radius: 50px;
+            -moz-border-radius: 50px;
+            border-radius: 50px;
+            background: #5a99ee;
+            display: inline-block;
+            padding: 10px 20px;
+            position: relative;
+        }
+
+        .chat-list .chat-message:before {
+            content: "";
+            position: absolute;
+            top: 15px;
+            width: 0;
+            height: 0;
+        }
+
+        .chat-list .chat-message h5 {
+            margin: 0 0 5px 0;
+            font-weight: 600;
+            line-height: 100%;
+            font-size: 1rem; /* Increased text size for chat messages */
+        }
+
+        .chat-list .chat-message p {
+            line-height: 20px; /* Increased line height for better readability */
+            margin: 0;
+            padding: 0;
+            font-size: 1rem; /* Increased text size for chat messages */
+        }
+
+        .chat-list .chat-body {
+            margin-left: 20px;
+            float: left;
+            width: 70%;
+        }
+
+        .chat-list .in .chat-message:before {
+            left: -12px;
+            border-bottom: 20px solid transparent;
+            border-right: 20px solid #5a99ee;
+        }
+
+        .chat-list .out .chat-img {
+            float: right;
+        }
+
+        .chat-list .out .chat-body {
+            float: right;
+            margin-right: 20px;
+            text-align: right;
+        }
+
+        .chat-list .out .chat-message {
+            background: #fc6d4c;
+        }
+
+        .chat-list .out .chat-message:before {
+            right: -12px;
+            border-bottom: 20px solid transparent;
+            border-left: 20px solid #fc6d4c;
+        }
+
+        .card .card-header:first-child {
+            -webkit-border-radius: 0.3rem 0.3rem 0 0;
+            -moz-border-radius: 0.3rem 0.3rem 0 0;
+            border-radius: 0.3rem 0.3rem 0 0;
+        }
+
+        .card .card-header {
+            background: #17202b;
+            border: 0;
+            font-size: 1rem;
+            padding: 0.65rem 1rem;
+            position: relative;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .content {
+            margin-top: 40px;
+        }
+  .user-message {
+        background: #5a99ee;
+        color: #fff;
+        border-radius: 10px;
+        padding: 10px;
+        margin: 5px;
+        max-width: 70%;
+        word-wrap: break-word;
+    }
+
+    .bot-message {
+        background: #fc6d4c;
+        color: #fff;
+        border-radius: 10px;
+        padding: 10px;
+        margin: 5px;
+        max-width: 70%;
+        word-wrap: break-word;
+    }
+
+    .timestamp {
+        font-size: 0.8rem;
+        color: #777;
+    }
+
+        /* Improved Buttons */
+        .button-container {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .button-container button {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1rem; /* Increased text size for buttons */
+            margin-right: 10px;
+            margin-left: 700px;
+        }
+
+        /* Input Field */
+        .input-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .input-container textarea {
+            flex: 1;
+            padding: 20px;
+            width: 1000px;
+            margin-left: 200px;
+            border: 1px solid #ccc;
+            border-radius: 40px;
+            font-size: 1rem; /* Increased text size for input field */
+            resize: none; /* Disable textarea resizing */
+            height: 60px; /* Set the height to 100px */
+        }
+
+        /* Center the placeholder text vertically */
+        .input-container textarea::placeholder {
+            text-align: center;
+            line-height: 40px; /* Adjust the line-height to vertically center the text */
+        }
+
+        /* Alternate user and bot messages */
+        .chat-list .out:nth-child(even) .chat-body,
+        .chat-list .in:nth-child(odd) .chat-body {
+            margin-top: 10px;
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="container content">
+    <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <div class="card">
+                <div class="card-header">Chat</div>
+                <div class="card-body height3">
+                    <ul class="chat-list">
+                        <!-- Loop through chat messages and alternate user and bot messages -->
+                        {% for i in range(session['messages']|length) %}
+                            {% set message = session['messages'][i] %}
+                            {% if i % 2 == 0 %}
+                                <li class="out">
+                                    <div class="chat-img">
+                                        <img alt="Avtar" src="https://bootdey.com/img/Content/avatar/avatar1.png">
+                                    </div>
+                                    <div class="chat-body">
+                                        <div class="chat-message">
+                                            <h5>User</h5>
+                                            <p>{{ message }}</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% else %}
+                                <li class="in">
+                                    <div class="chat-img">
+                                        <img alt="Avtar" src="https://bootdey.com/img/Content/avatar/avatar6.png">
+                                    </div>
+                                    <div class="chat-body">
+                                        <div class="chat-message">
+                                            <h5>Bot</h5>
+                                            <p>{{ message }}</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                <!-- Input Field -->
+                <div class="input-container">
+                    <form id="chatForm" method="POST" action="/healthassistant" style="height:20%;overflow:hidden;">
+                        <textarea class="form-control" name="query" rows="5" id="query" placeholder="Type your message" required></textarea>
+                    </form>
+                </div>
+                <!-- Buttons Container -->
+                <div class="button-container">
+                    <form method="POST" action="/clear">
+                        <button type="submit">Clear Chat</button>
+                    </form>
+                </div>
+                <p style="margin-left:550px;" class="disclaimer">Disclaimer: This chatbot provides information, not medical advice.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Submit the form when Enter key is pressed in the text area
+    document.getElementById("query").addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault(); // Prevent newline in the text area
+            document.getElementById("chatForm").submit(); // Submit the form
+        }
+    });
+</script>
+</body>
+</html>
