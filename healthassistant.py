@@ -58,17 +58,26 @@ def chat():
     user_query = request.form['query']
     if user_query.strip():
         response, thread_id = assistant_chatbot(user_query, session.get('thread_id'))
+        print(thread_id)
+
         session['thread_id'] = thread_id
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         session['messages'].append((timestamp, "User", user_query))
         session['messages'].append((timestamp, "Bot", response))
     return redirect(url_for('healthassistant.home'))
 
+
+def delete_thread(thread_id):
+    if thread_id:
+        client.beta.threads.delete(thread_id=thread_id)
 @healthassitant_app.route('/clear', methods=['POST'])
 def clear_chat():
+    thread_id = session.get('thread_id')
+    delete_thread(thread_id)  # Delete the thread
     session['messages'] = []
+    session.pop('thread_id', None)  # Remove thread_id from session
     return redirect(url_for('healthassistant.home'))
-
+    print(session)
 # @healthassitant_app.route('/export', methods=['POST'])
 # def export_chat():
 #     session['messages'] = []

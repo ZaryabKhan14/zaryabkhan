@@ -61,6 +61,10 @@
 </head>
 <body>
     <h1>Text To Image Generator</h1>
+    <div>
+            <form action="/logout" method="POST">
+        <button type="submit">Logout</button>
+    </form>
 
     <!-- Form for user input -->
     <form method="POST" action="/imagegenerator">
@@ -76,5 +80,8 @@
         <img src="{{ image_url }}" alt="Generated Image">
     </div>
     {% endif %}
+    </div>
+
+
 </body>
 </html>
